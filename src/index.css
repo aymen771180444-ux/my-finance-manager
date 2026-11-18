@@ -1,0 +1,271 @@
+@import 'tailwindcss';
+
+/* Design tokens — "Sapphire" glass theme (light) */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --c-bg: #f2f5fa;
+  --c-surface: rgba(255, 255, 255, 0.62);
+  --c-surface-2: rgba(255, 255, 255, 0.42);
+  --c-text: #0f1b33;
+  --c-text-dim: #4a5a75;
+  --c-border: rgba(30, 50, 90, 0.12);
+  --c-primary: #1d4ed8;
+  --c-primary-2: #0e7490;
+  --c-primary-soft: #dbe7ff;
+  --c-income: #036b4e;
+  --c-income-soft: #d5f5e6;
+  --c-expense: #c81e1e;
+  --c-expense-soft: #fee2e2;
+  --c-transfer: #6d28d9;
+  --c-transfer-soft: #ede9fe;
+  --c-liability: #8a5204;
+  --c-liability-soft: #fef3c7;
+  --c-danger: #c81e1e;
+  --c-on-primary: #ffffff;
+  /* glass */
+  --c-glass-edge: rgba(255, 255, 255, 0.75);
+  --c-glass-hi: rgba(255, 255, 255, 0.9);
+  --c-glow: rgba(29, 78, 216, 0.18);
+  --c-nav: rgba(255, 255, 255, 0.7);
+  --blob-1: #c7dbff;
+  --blob-2: #c3efe2;
+  --blob-3: #f6e7c4;
+  --blob-4: #d9e1f2;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --c-bg: #0b1324;
+  --c-surface: rgba(255, 255, 255, 0.07);
+  --c-surface-2: rgba(255, 255, 255, 0.045);
+  --c-text: #eef3ff;
+  --c-text-dim: #a9b8d3;
+  --c-border: rgba(255, 255, 255, 0.11);
+  --c-primary: #7aa7ff;
+  --c-primary-2: #5eead4;
+  --c-primary-soft: #16295a;
+  --c-income: #5ee39a;
+  --c-income-soft: #0f3d2a;
+  --c-expense: #ff8a94;
+  --c-expense-soft: #4f1622;
+  --c-transfer: #c4b5fd;
+  --c-transfer-soft: #2e1f5e;
+  --c-liability: #fcd34d;
+  --c-liability-soft: #4a3410;
+  --c-danger: #ff8a94;
+  --c-on-primary: #06122b;
+  --c-glass-edge: rgba(255, 255, 255, 0.12);
+  --c-glass-hi: rgba(255, 255, 255, 0.16);
+  --c-glow: rgba(80, 140, 255, 0.22);
+  --c-nav: rgba(16, 26, 48, 0.74);
+  --blob-1: #163a7a;
+  --blob-2: #0c4a46;
+  --blob-3: #3a2f12;
+  --blob-4: #1c2a55;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-ink: var(--c-text);
+  --color-ink-dim: var(--c-text-dim);
+  --color-line: var(--c-border);
+  --color-primary: var(--c-primary);
+  --color-primary-soft: var(--c-primary-soft);
+  --color-primary-2: var(--c-primary-2);
+  --color-on-primary: var(--c-on-primary);
+  --color-income: var(--c-income);
+  --color-income-soft: var(--c-income-soft);
+  --color-expense: var(--c-expense);
+  --color-expense-soft: var(--c-expense-soft);
+  --color-transfer: var(--c-transfer);
+  --color-transfer-soft: var(--c-transfer-soft);
+  --color-liability: var(--c-liability);
+  --color-liability-soft: var(--c-liability-soft);
+  --color-danger: var(--c-danger);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter Variable', 'SF Arabic', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+}
+
+html {
+  background: var(--c-bg);
+}
+body {
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  letter-spacing: -0.008em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Arabic letters must never be tracked (it breaks joining) */
+[dir='rtl'] body {
+  letter-spacing: 0;
+}
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+[dir='rtl'] :is(h1, h2, h3) {
+  letter-spacing: 0;
+}
+
+/* Soft vivid color blobs behind the glass. A fixed layer instead of
+   background-attachment:fixed (unsupported on mobile Safari / costly on Android). */
+:root {
+  --bg-blobs:
+    radial-gradient(55% 40% at 8% 2%, var(--blob-1) 0%, transparent 70%),
+    radial-gradient(50% 38% at 96% 18%, var(--blob-2) 0%, transparent 72%),
+    radial-gradient(60% 42% at 20% 78%, var(--blob-4) 0%, transparent 70%),
+    radial-gradient(55% 40% at 88% 96%, var(--blob-3) 0%, transparent 70%),
+    var(--c-bg);
+}
+
+@media screen {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--bg-blobs);
+  }
+  .bg-blobs {
+    background: var(--bg-blobs);
+  }
+
+  /* Glass panes. Cards get no backdrop-filter on purpose: it would turn every
+     card into the containing block of fixed dialogs rendered inside it, and the
+     background is already a soft blur. Fixed bars and overlays do blur. */
+  .glass {
+    background: var(--c-surface);
+    border: 1px solid var(--c-glass-edge);
+    box-shadow:
+      0 12px 32px -14px var(--c-glow),
+      inset 0 1px 0 var(--c-glass-hi);
+  }
+  .glass-bar {
+    background: var(--c-nav);
+    border-color: var(--c-glass-edge);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+  }
+  .glass-overlay {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Primary fills become a vivid gradient with a soft glow */
+  .bg-primary {
+    background-image: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
+  }
+  .glow {
+    box-shadow: 0 10px 28px -8px var(--c-glow), 0 4px 12px -6px var(--c-glow);
+  }
+}
+
+/* Reduced transparency (accessibility setting): solid surfaces */
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  :root[data-theme='light'] {
+    --c-surface: #ffffff;
+    --c-surface-2: #eef2f8;
+    --c-nav: #ffffff;
+  }
+  :root[data-theme='dark'] {
+    --c-surface: #17223a;
+    --c-surface-2: #131c31;
+    --c-nav: #17223a;
+  }
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Large touch targets (PRD §27) */
+button,
+a,
+input,
+select {
+  min-height: 2.5rem;
+}
+
+/* Visible focus for keyboard / switch-access users (mouse/touch clicks don't show it). */
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print / Save-as-PDF: only the report, always on the light palette. */
+@media print {
+  :root,
+  :root[data-theme='dark'] {
+    --c-bg: #ffffff;
+    --c-surface: #ffffff;
+    --c-surface-2: #f3f4f6;
+    --c-text: #111827;
+    --c-text-dim: #4b5563;
+    --c-border: #d1d5db;
+    --c-primary: #1d4ed8;
+    --c-primary-2: #1d4ed8;
+    --c-income: #036b4e;
+    --c-expense: #b91c1c;
+    --c-liability: #92400e;
+    --c-liability-soft: #fef3c7;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    border: none !important;
+    padding: 0 !important;
+  }
+  .print-area .overflow-x-auto {
+    overflow: visible !important;
+  }
+  .report-section {
+    break-inside: auto;
+  }
+  .print-area thead {
+    display: table-header-group;
+  }
+  .print-area tr {
+    break-inside: avoid;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+::selection {
+  background: var(--c-primary);
+  color: #fff;
+}
