@@ -80,7 +80,7 @@ export default function BackupPage() {
       await restorePayload(verified);
       setMsg({ ok: true, text: t('backup.restored') });
       // reload so every screen and store re-reads the restored data
-      setTimeout(() => window.location.assign('/'), 600);
+      setTimeout(() => window.location.assign(import.meta.env.BASE_URL), 600);
     } catch (e) {
       setMsg({ ok: false, text: explain(e) });
       setBusy(false);

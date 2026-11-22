@@ -126,7 +126,7 @@ function useSystemNotifications() {
       const body = notificationText(n, settings?.calendar ?? 'gregorian');
       const title = String(useApp.getState().settings?.language === 'en' ? 'My Finance Manager' : 'مدير أموالي');
       const show = (reg?: ServiceWorkerRegistration): void => {
-        if (reg) void reg.showNotification(title, { body, tag: n.dedupe, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png' });
+        if (reg) void reg.showNotification(title, { body, tag: n.dedupe, icon: `${import.meta.env.BASE_URL}icons/icon-192.png`, badge: `${import.meta.env.BASE_URL}icons/icon-192.png` });
         else new Notification(title, { body, tag: n.dedupe });
       };
       if ('serviceWorker' in navigator) void navigator.serviceWorker.getRegistration().then((r) => show(r ?? undefined));
