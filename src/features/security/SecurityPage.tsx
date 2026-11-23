@@ -11,6 +11,7 @@ import {
   validatePin, validateRecovery,
 } from '../../db/security';
 import { biometricSupport, enrollPlatformCredential } from '../../lib/biometric';
+import { toast } from '../../store/toast';
 
 function PinInput(props: { label: string; value: string; onChange: (v: string) => void }) {
   return (
@@ -50,6 +51,7 @@ export default function SecurityPage() {
       await fn();
       await refresh();
       setMsg({ ok: true, text: t('security.saved') });
+      toast(t('security.saved'));
       reset();
     } catch (e) {
       const m = e instanceof Error ? e.message : String(e);

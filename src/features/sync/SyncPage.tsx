@@ -12,6 +12,7 @@ import {
   restorePoints, rollBackTo, disconnect, type JoinMode,
 } from '../../sync/service';
 import type { SyncConflict, SyncState } from '../../db/types';
+import { toast } from '../../store/toast';
 import { formatMoney, type CurrencyCode } from '../../engine/money';
 
 const ERRORS: Record<string, string> = {
@@ -54,7 +55,10 @@ export default function SyncPage() {
     setMsg(null);
     try {
       await fn();
-      if (okText) setMsg({ ok: true, text: okText });
+      if (okText) {
+        setMsg({ ok: true, text: okText });
+        toast(okText);
+      }
     } catch (e) {
       setMsg({ ok: false, text: explain(e) });
     } finally {

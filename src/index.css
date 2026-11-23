@@ -269,3 +269,96 @@ select {
   background: var(--c-primary);
   color: #fff;
 }
+
+/* ——— Motion (iOS-like; the reduced-motion rule above switches it off) ——— */
+:root {
+  --dir-sign: 1;
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+}
+[dir='rtl'] {
+  --dir-sign: -1;
+}
+@keyframes page-push {
+  from {
+    opacity: 0.4;
+    transform: translateX(calc(32% * var(--dir-sign)));
+  }
+}
+@keyframes page-pop {
+  from {
+    opacity: 0.4;
+    transform: translateX(calc(-22% * var(--dir-sign)));
+  }
+}
+@keyframes page-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-140%) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6%) scale(1.02);
+  }
+}
+@keyframes icon-pop {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+/* fill-mode backwards: no transform is left behind once finished, so fixed sheets opened inside a page keep working */
+.page-push {
+  animation: page-push 0.42s var(--ease-ios) backwards;
+}
+.page-pop {
+  animation: page-pop 0.38s var(--ease-ios) backwards;
+}
+.page-fade {
+  animation: page-fade 0.28s ease-out backwards;
+}
+.sheet-up {
+  animation: sheet-up 0.42s var(--ease-ios) backwards;
+}
+.fade-in {
+  animation: fade-in 0.25s ease-out backwards;
+}
+.pop-in {
+  animation: pop-in 0.24s var(--ease-ios) backwards;
+}
+.toast-in {
+  animation: toast-in 0.5s var(--ease-ios) backwards;
+}
+.toast-icon {
+  animation: icon-pop 0.55s var(--ease-ios) backwards;
+}
+/* pages slide sideways: clip the overflow so the screen never scrolls horizontally mid-animation */
+body {
+  overflow-x: clip;
+}

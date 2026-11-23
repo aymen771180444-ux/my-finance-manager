@@ -973,5 +973,30 @@
       "load": "تعذّر تحميل تسجيل دخول Google. تحقّق من الاتصال.",
       "generic": "حدث خطأ ({{code}})."
     }
+  },
+  "toast": {
+    "create": "تم حفظ {{item}}",
+    "update": "تم تحديث {{item}}",
+    "delete": "تم حذف {{item}}",
+    "restore": "تمت استعادة {{item}}",
+    "reconcile": "تمت مطابقة الرصيد",
+    "imported": "تم استيراد {{count}} معاملة",
+    "backupDone": "تم إنشاء ملف النسخة الاحتياطية",
+    "exportDone": "التصدير جاهز",
+    "items": {
+      "default": "العنصر",
+      "transactions": "المعاملة",
+      "accounts": "الحساب",
+      "categories": "الفئة",
+      "budgets": "الميزانية",
+      "savingsGoals": "هدف الادخار",
+      "debts": "الدين",
+      "recurringObligations": "الالتزام المتكرر",
+      "investments": "الاستثمار",
+      "assets": "الأصل",
+      "attachments": "المرفق",
+      "tags": "الوسم",
+      "profiles": "الملف الشخصي"
+    }
   }
 }

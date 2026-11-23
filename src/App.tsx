@@ -15,6 +15,8 @@ import { setNotificationSink } from './db/notifications';
 import { notificationText } from './features/notifications/format';
 import { DEFAULT_NOTIFICATION_PREFS } from './db/types';
 import { SyncBanner } from './features/sync/SyncBanner';
+import { Toaster } from './components/Toaster';
+import { usePageTransition } from './hooks/pageTransition';
 
 // Screens load on demand: the first paint only needs the dashboard.
 const TransactionsPage = lazy(() => import('./features/transactions/TransactionsPage'));
@@ -141,6 +143,7 @@ export default function App() {
   const lockStatus = useLock((s) => s.status);
   const initLock = useLock((s) => s.init);
   const location = useLocation();
+  const page = usePageTransition();
 
   useEffect(() => {
     void init();
@@ -187,8 +190,9 @@ export default function App() {
       <div className="mx-auto min-h-dvh max-w-lg px-4 pb-36 pt-5" ref={shellRef} aria-hidden={lockStatus === 'locked'}>
         <SyncBanner />
         <ErrorBoundary resetKey={location.pathname}>
+          <div key={page.key} className={page.className}>
           <Suspense fallback={<div className="py-16 text-center text-sm text-ink-dim">…</div>}>
-            <Routes>
+            <Routes location={location}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/transactions" element={<TransactionsPage />} />
               <Route path="/accounts" element={<AccountsPage />} />
@@ -222,6 +226,7 @@ export default function App() {
               <Route path="*" element={<Dashboard />} />
             </Routes>
           </Suspense>
+          </div>
         </ErrorBoundary>
         <BottomNav />
         <ErrorBoundary resetKey={location.pathname}>
@@ -229,6 +234,7 @@ export default function App() {
         </ErrorBoundary>
       </div>
       {lockStatus === 'locked' && <LockScreen />}
+      <Toaster />
     </>
   );
 }

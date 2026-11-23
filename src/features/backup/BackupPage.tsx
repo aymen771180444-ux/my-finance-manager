@@ -11,6 +11,7 @@ import { buildExportZip, EXPORT_SETS, type ExportSet } from '../../db/dataExport
 import { downloadFile } from '../../lib/download';
 import { todayISO } from '../../db/schema';
 import { getSettings } from '../../db/profiles';
+import { toast } from '../../store/toast';
 
 export default function BackupPage() {
   const { t, i18n } = useTranslation();
@@ -49,6 +50,7 @@ export default function BackupPage() {
       downloadFile(text, `my-finance-backup-${todayISO()}.mfm`, 'application/octet-stream');
       const total = Object.values(counts).reduce((s, n) => s + n, 0);
       setMsg({ ok: true, text: t('backup.created', { count: total }) });
+      toast(t('toast.backupDone'));
       setLastBackup((await getSettings())?.lastBackupAt);
       setPw('');
       setPw2('');
@@ -79,6 +81,7 @@ export default function BackupPage() {
     try {
       await restorePayload(verified);
       setMsg({ ok: true, text: t('backup.restored') });
+      toast(t('backup.restored'));
       // reload so every screen and store re-reads the restored data
       setTimeout(() => window.location.assign(import.meta.env.BASE_URL), 600);
     } catch (e) {
@@ -95,6 +98,7 @@ export default function BackupPage() {
       const zip = await buildExportZip(profileId, sets);
       downloadFile(zip, `my-finance-export-${todayISO()}.zip`, 'application/zip');
       setMsg({ ok: true, text: t('backup.exported') });
+      toast(t('toast.exportDone'));
     } catch (e) {
       setMsg({ ok: false, text: explain(e) });
     } finally {

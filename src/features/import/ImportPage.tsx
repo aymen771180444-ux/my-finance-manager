@@ -9,6 +9,8 @@ import { useAccounts, useActiveProfileId } from '../../hooks/data';
 import { useLock } from '../../store/lock';
 import { db } from '../../db/schema';
 import { commitImport } from '../../db/importer';
+import { quietly } from '../../db/audit';
+import { toast } from '../../store/toast';
 import { parseCsv, guessColumns, guessDateFormat, buildRows, IMPORT_FIELDS, type ColumnMap, type DateFormat, type ImportField } from '../../engine/csvImport';
 import { runChecks } from '../../services/scheduler';
 
@@ -73,7 +75,9 @@ export default function ImportPage() {
     setBusy(true);
     setError('');
     try {
-      const r = await commitImport(profileId, rows);
+      // one summary pop-up instead of one per imported row
+      const r = await quietly(() => commitImport(profileId, rows));
+      toast(t('toast.imported', { count: r.count }));
       setDone(r);
       setTable(null);
       void runChecks(profileId);

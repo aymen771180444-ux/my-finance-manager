@@ -973,5 +973,30 @@
       "load": "Could not load Google sign-in. Check your connection.",
       "generic": "Something went wrong ({{code}})."
     }
+  },
+  "toast": {
+    "create": "{{item}} saved",
+    "update": "{{item}} updated",
+    "delete": "{{item}} deleted",
+    "restore": "{{item}} restored",
+    "reconcile": "Balance reconciled",
+    "imported": "{{count}} transactions imported",
+    "backupDone": "Backup file created",
+    "exportDone": "Export ready",
+    "items": {
+      "default": "Item",
+      "transactions": "Transaction",
+      "accounts": "Account",
+      "categories": "Category",
+      "budgets": "Budget",
+      "savingsGoals": "Savings goal",
+      "debts": "Debt",
+      "recurringObligations": "Recurring item",
+      "investments": "Investment",
+      "assets": "Asset",
+      "attachments": "Attachment",
+      "tags": "Tag",
+      "profiles": "Profile"
+    }
   }
 }

@@ -6,7 +6,7 @@ export function Card({ children, className = '', onClick }: { children: React.Re
   return (
     <div
       onClick={onClick}
-      className={`glass rounded-3xl ${onClick ? 'cursor-pointer active:opacity-80' : ''} ${className}`}
+      className={`glass rounded-3xl ${onClick ? 'cursor-pointer transition active:scale-[0.985] active:opacity-90' : ''} ${className}`}
     >
       {children}
     </div>
@@ -110,8 +110,8 @@ export function Sheet({
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal aria-label={title}>
-      <div className="glass-overlay absolute inset-0 bg-[#2b1035]/40" onClick={onClose} />
-      <div className="relative z-10 max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[2rem] border-t border-[var(--c-glass-edge)] bg-bg p-4 pb-8 shadow-2xl sm:rounded-[2rem]">
+      <div className="glass-overlay fade-in absolute inset-0 bg-[#0b1324]/40" onClick={onClose} />
+      <div className="sheet-up relative z-10 max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[2rem] border-t border-[var(--c-glass-edge)] bg-bg p-4 pb-8 shadow-2xl sm:rounded-[2rem]">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-bold">{title}</h2>
           <button onClick={onClose} aria-label={t('common.close')} className="rounded-full p-2 text-ink-dim active:bg-surface-2">
@@ -145,8 +145,8 @@ export function ConfirmDialog({
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-6" role="alertdialog" aria-modal>
-      <div className="glass-overlay absolute inset-0 bg-[#2b1035]/40" onClick={onCancel} />
-      <Card className="relative z-10 w-full max-w-sm p-5">
+      <div className="glass-overlay fade-in absolute inset-0 bg-[#0b1324]/40" onClick={onCancel} />
+      <Card className="pop-in relative z-10 w-full max-w-sm p-5">
         <h3 className="mb-2 text-base font-bold">{title}</h3>
         <p className="mb-4 text-sm text-ink-dim">{body}</p>
         <div className="flex gap-2">

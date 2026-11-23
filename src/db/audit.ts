@@ -1,5 +1,40 @@
+import Dexie from 'dexie';
 import { db, newId, nowISO } from './schema';
 import type { AuditAction } from './types';
+
+/**
+ * Optional listener told about each user-visible change once it is saved
+ * (the UI shows a "done" pop-up). One call per database transaction — the
+ * first change in it, which is the one the user asked for — and only after
+ * the transaction commits, so a failed save never reports success.
+ */
+export type MutationEvent = { table: string; action: AuditAction };
+let sink: ((e: MutationEvent) => void) | null = null;
+export const setMutationSink = (fn: typeof sink) => {
+  sink = fn;
+};
+
+/** Run background work (recurring bills, auto-saving, imports) without per-change pop-ups. */
+let quiet = 0;
+export async function quietly<T>(fn: () => Promise<T>): Promise<T> {
+  quiet++;
+  try {
+    return await fn();
+  } finally {
+    quiet--;
+  }
+}
+
+const announced = new WeakSet<object>();
+function announce(e: MutationEvent) {
+  if (!sink || quiet > 0) return;
+  const fire = sink;
+  const idb = (Dexie.currentTransaction as unknown as { idbtrans?: IDBTransaction } | null)?.idbtrans;
+  if (!idb) return void setTimeout(() => fire(e));
+  if (announced.has(idb)) return;
+  announced.add(idb);
+  idb.addEventListener('complete', () => fire(e));
+}
 
 /**
  * Write an audit-log row and mirror the mutation into the sync outbox.
@@ -13,6 +48,7 @@ export async function recordMutation(opts: {
   before: unknown | null;
   after: unknown | null;
 }): Promise<void> {
+  announce({ table: opts.table, action: opts.action });
   const ts = nowISO();
   await db.auditLog.add({
     id: newId(),
