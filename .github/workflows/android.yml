@@ -50,6 +50,7 @@ jobs:
         run: npm run build
         env:
           BUILD_TARGET: android
+          APP_VERSION: ${{ env.VERSION_NAME }}
 
       - name: Create the Android project
         run: |

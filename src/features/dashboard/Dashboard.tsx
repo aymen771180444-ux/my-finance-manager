@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Wallet, Bell, Search, LayoutGrid } from 'lucide-react';
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
+import { lazyPage } from '../../lib/lazyPage';
 import { useUnreadCount } from '../../hooks/stage2';
 import { useAccounts, useCategoryMap } from '../../hooks/data';
 import { useDashboardData, type DashboardData, type UpcomingRow } from '../../hooks/dashboard';
@@ -17,7 +18,7 @@ import { ForecastView } from '../forecast/ForecastView';
 import { mergeLayout, type CardId } from './cardRegistry';
 import { CardShell } from './CardShell';
 
-const DashboardChart = lazy(() => import('./DashboardCharts'));
+const DashboardChart = lazyPage(() => import('./DashboardCharts'));
 
 function UpcomingList({ rows, empty }: { rows: UpcomingRow[]; empty: string }) {
   const { i18n } = useTranslation();

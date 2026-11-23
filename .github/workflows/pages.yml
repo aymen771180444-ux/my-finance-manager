@@ -29,6 +29,7 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          APP_VERSION: web-${{ github.run_number }}
           VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
       # GitHub Pages has no SPA rewrites: serve the app for any unknown path too
       - run: cp dist/index.html dist/404.html

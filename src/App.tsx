@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Home, ReceiptText, Wallet, ChartPie, Menu, Plus } from 'lucide-react';
@@ -18,37 +18,39 @@ import { SyncBanner } from './features/sync/SyncBanner';
 import { Toaster } from './components/Toaster';
 import { usePageTransition } from './hooks/pageTransition';
 import { isNativeApp } from './lib/platform';
+import { lazyPage } from './lib/lazyPage';
+import { UpdateBanner } from './components/UpdateBanner';
 
 // Screens load on demand: the first paint only needs the dashboard.
-const TransactionsPage = lazy(() => import('./features/transactions/TransactionsPage'));
-const AccountsPage = lazy(() => import('./features/accounts/AccountsPage'));
-const AccountDetailPage = lazy(() => import('./features/accounts/AccountDetailPage'));
-const AnalyticsPage = lazy(() => import('./features/analytics/AnalyticsPage'));
-const MorePage = lazy(() => import('./features/more/MorePage'));
-const SettingsPage = lazy(() => import('./features/more/SettingsPage'));
-const CategoriesPage = lazy(() => import('./features/more/CategoriesPage'));
-const RatesPage = lazy(() => import('./features/more/RatesPage'));
-const TrashPage = lazy(() => import('./features/more/TrashPage'));
-const AuditPage = lazy(() => import('./features/more/AuditPage'));
-const ProfilesPage = lazy(() => import('./features/more/ProfilesPage'));
-const BudgetsPage = lazy(() => import('./features/budgets/BudgetsPage'));
-const GoalsPage = lazy(() => import('./features/goals/GoalsPage'));
-const DebtsPage = lazy(() => import('./features/debts/DebtsPage'));
-const RecurringPage = lazy(() => import('./features/recurring/RecurringPage'));
-const NotificationsPage = lazy(() => import('./features/notifications/NotificationsPage'));
-const NotificationSettingsPage = lazy(() => import('./features/notifications/NotificationSettingsPage'));
-const ReportsPage = lazy(() => import('./features/reports/ReportsPage'));
-const CalendarPage = lazy(() => import('./features/calendar/CalendarPage'));
-const SearchPage = lazy(() => import('./features/search/SearchPage'));
-const CalculatorPage = lazy(() => import('./features/calculator/CalculatorPage'));
-const TagsPage = lazy(() => import('./features/more/TagsPage'));
-const InvestmentsPage = lazy(() => import('./features/investments/InvestmentsPage'));
-const AssetsPage = lazy(() => import('./features/assets/AssetsPage'));
-const DashboardCustomizePage = lazy(() => import('./features/dashboard/DashboardCustomizePage'));
-const SecurityPage = lazy(() => import('./features/security/SecurityPage'));
-const BackupPage = lazy(() => import('./features/backup/BackupPage'));
-const ImportPage = lazy(() => import('./features/import/ImportPage'));
-const SyncPage = lazy(() => import('./features/sync/SyncPage'));
+const TransactionsPage = lazyPage(() => import('./features/transactions/TransactionsPage'));
+const AccountsPage = lazyPage(() => import('./features/accounts/AccountsPage'));
+const AccountDetailPage = lazyPage(() => import('./features/accounts/AccountDetailPage'));
+const AnalyticsPage = lazyPage(() => import('./features/analytics/AnalyticsPage'));
+const MorePage = lazyPage(() => import('./features/more/MorePage'));
+const SettingsPage = lazyPage(() => import('./features/more/SettingsPage'));
+const CategoriesPage = lazyPage(() => import('./features/more/CategoriesPage'));
+const RatesPage = lazyPage(() => import('./features/more/RatesPage'));
+const TrashPage = lazyPage(() => import('./features/more/TrashPage'));
+const AuditPage = lazyPage(() => import('./features/more/AuditPage'));
+const ProfilesPage = lazyPage(() => import('./features/more/ProfilesPage'));
+const BudgetsPage = lazyPage(() => import('./features/budgets/BudgetsPage'));
+const GoalsPage = lazyPage(() => import('./features/goals/GoalsPage'));
+const DebtsPage = lazyPage(() => import('./features/debts/DebtsPage'));
+const RecurringPage = lazyPage(() => import('./features/recurring/RecurringPage'));
+const NotificationsPage = lazyPage(() => import('./features/notifications/NotificationsPage'));
+const NotificationSettingsPage = lazyPage(() => import('./features/notifications/NotificationSettingsPage'));
+const ReportsPage = lazyPage(() => import('./features/reports/ReportsPage'));
+const CalendarPage = lazyPage(() => import('./features/calendar/CalendarPage'));
+const SearchPage = lazyPage(() => import('./features/search/SearchPage'));
+const CalculatorPage = lazyPage(() => import('./features/calculator/CalculatorPage'));
+const TagsPage = lazyPage(() => import('./features/more/TagsPage'));
+const InvestmentsPage = lazyPage(() => import('./features/investments/InvestmentsPage'));
+const AssetsPage = lazyPage(() => import('./features/assets/AssetsPage'));
+const DashboardCustomizePage = lazyPage(() => import('./features/dashboard/DashboardCustomizePage'));
+const SecurityPage = lazyPage(() => import('./features/security/SecurityPage'));
+const BackupPage = lazyPage(() => import('./features/backup/BackupPage'));
+const ImportPage = lazyPage(() => import('./features/import/ImportPage'));
+const SyncPage = lazyPage(() => import('./features/sync/SyncPage'));
 
 function BottomNav() {
   const { t } = useTranslation();
@@ -201,6 +203,7 @@ export default function App() {
   return (
     <>
       <div className="mx-auto min-h-dvh max-w-lg px-4 pb-36 pt-5" ref={shellRef} aria-hidden={lockStatus === 'locked'}>
+        <UpdateBanner />
         <SyncBanner />
         <ErrorBoundary resetKey={location.pathname}>
           <div key={page.key} className={page.className}>

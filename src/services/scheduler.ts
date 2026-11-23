@@ -13,7 +13,6 @@ import { budgetStatus } from '../db/budgets';
 import { processRecurring } from '../db/recurring';
 import { processGoalAutoSave } from '../db/goalAutoSave';
 import { notifyOnce } from '../db/notifications';
-import { quietly } from '../db/audit';
 import { daysBefore } from '../engine/recurring';
 import { periodRange, previousPeriodRange } from '../engine/budgets';
 import { summarize } from '../engine/analytics';
@@ -105,11 +104,6 @@ export async function checkBackupReminder(profileId: string, p: NotificationPref
 
 /** Full pass. Financial work (recurring auto-creation) always runs; alerts follow preferences. */
 export async function runChecks(profileId: string): Promise<void> {
-  // automatic work: no "saved" pop-ups (it reports through notifications instead)
-  return quietly(() => runChecksNow(profileId));
-}
-
-async function runChecksNow(profileId: string): Promise<void> {
   try {
     const p = await prefs();
     await processRecurring(profileId, todayISO(), { notifyDue: p.bills, notifyCreated: p.recurring });

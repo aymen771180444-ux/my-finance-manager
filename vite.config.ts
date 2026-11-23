@@ -10,12 +10,17 @@ const androidApp = process.env.BUILD_TARGET === 'android';
 
 export default defineConfig({
   base,
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.APP_VERSION ?? 'dev'),
+  },
   plugins: [
     react(),
     tailwindcss(),
     VitePWA({
       disable: androidApp,
-      registerType: 'autoUpdate',
+      // updates wait for the user (src/lib/pwa.ts) so a running app never loses its own files
+      registerType: 'prompt',
+      injectRegister: false,
       includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
       manifest: {
         id: base,

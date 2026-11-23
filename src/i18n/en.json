@@ -231,7 +231,8 @@
     "backup": "Backup & sync",
     "notifications": "Notifications",
     "backupPending": "Cloud backup (Google Drive) and sync (Supabase): pending connection. Local export/import arrives in Stage 5.",
-    "dashboardCards": "Dashboard cards"
+    "dashboardCards": "Dashboard cards",
+    "version": "Version {{version}}"
   },
   "profiles": {
     "title": "Profiles",
@@ -1001,5 +1002,11 @@
       "tags": "Tag",
       "profiles": "Profile"
     }
+  },
+  "update": {
+    "ready": "A new version of the app is ready",
+    "apply": "Update",
+    "staleTitle": "The app was updated",
+    "staleBody": "Reload to open this screen in the new version. Your data is safe."
   }
 }

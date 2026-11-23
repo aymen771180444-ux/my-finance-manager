@@ -9,13 +9,26 @@ export function Toaster() {
   const { current, dismiss } = useToast();
   const { t } = useTranslation();
 
-  // every saved change (add, edit, delete, restore…) announces itself once it is committed
+  // every saved change the user made (add, edit, delete, restore…) announces itself once committed.
+  // Background work (recurring bills, auto-saving, sync) runs without a recent tap, so it stays silent —
+  // without muting a save the user makes while that work is running.
   useEffect(() => {
+    let lastTap = 0;
+    const tapped = () => {
+      lastTap = Date.now();
+    };
+    window.addEventListener('pointerdown', tapped, true);
+    window.addEventListener('keydown', tapped, true);
     setMutationSink(({ table, action }) => {
+      if (Date.now() - lastTap > 10_000) return;
       const item = t(`toast.items.${table}`, { defaultValue: t('toast.items.default') });
       toast(t(`toast.${action}`, { item }));
     });
-    return () => setMutationSink(null);
+    return () => {
+      setMutationSink(null);
+      window.removeEventListener('pointerdown', tapped, true);
+      window.removeEventListener('keydown', tapped, true);
+    };
   }, [t]);
 
   if (!current) return null;

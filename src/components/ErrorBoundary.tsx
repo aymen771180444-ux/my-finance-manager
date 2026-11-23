@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from 'react';
 import i18n from '../i18n';
+import { isStaleChunkError } from '../lib/lazyPage';
 
 interface State {
   error: Error | null;
@@ -29,8 +30,10 @@ export class ErrorBoundary extends Component<{ children: ReactNode; resetKey?: s
     if (!this.state.error) return this.props.children;
     return (
       <div className="mt-10 glass rounded-3xl p-5 text-center">
-        <p className="mb-1 font-bold">{i18n.t('common.error')}</p>
-        <p className="mb-4 text-xs text-ink-dim" dir="ltr">{this.state.error.message}</p>
+        <p className="mb-1 font-bold">{isStaleChunkError(this.state.error) ? i18n.t('update.staleTitle') : i18n.t('common.error')}</p>
+        <p className="mb-4 text-xs text-ink-dim" dir={isStaleChunkError(this.state.error) ? undefined : 'ltr'}>
+          {isStaleChunkError(this.state.error) ? i18n.t('update.staleBody') : this.state.error.message}
+        </p>
         <button className="rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary" onClick={() => window.location.reload()}>
           {i18n.t('common.reload')}
         </button>

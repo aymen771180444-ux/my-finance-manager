@@ -103,6 +103,7 @@ export default function SettingsPage() {
           </button>
         ))}
       </Card>
+      <p className="mt-4 text-center text-xs text-ink-dim" dir="auto">{t('settings.version', { version: __APP_VERSION__ })}</p>
     </div>
   );
 }
