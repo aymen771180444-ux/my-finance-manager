@@ -5,6 +5,8 @@ import { Paperclip, Camera, FileText, Image as ImageIcon, Trash2, X, Lock } from
 import { db } from '../db/schema';
 import { addAttachment, readAttachment, deleteAttachment, MAX_ATTACHMENT_BYTES } from '../db/attachments';
 import { compressImage, attachmentName } from '../lib/image';
+import { downloadFile } from '../lib/download';
+import { isNativeApp } from '../lib/platform';
 import { useLock } from '../store/lock';
 import { useActiveProfileId } from '../hooks/data';
 import type { AttachmentOwner } from '../db/types';
@@ -83,6 +85,8 @@ export function AttachmentList({ ownerType, ownerId }: { ownerType: AttachmentOw
     setError('');
     try {
       const blob = await readAttachment(id);
+      // inside the Android app a PDF can't open in a tab: hand it to Android's share sheet instead
+      if (!mime.startsWith('image/') && isNativeApp()) return await downloadFile(blob, name, mime);
       const url = URL.createObjectURL(blob);
       if (mime.startsWith('image/')) setViewing({ url, mime, name });
       else {

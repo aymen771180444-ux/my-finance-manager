@@ -14,6 +14,7 @@ import { monthRange, formatDate } from '../../lib/dates';
 import { useApp } from '../../store/app';
 import { ReportView } from './ReportView';
 import { exportReportXlsx } from '../../lib/exportXlsx';
+import { isNativeApp } from '../../lib/platform';
 
 const TYPES: ReportType[] = ['comprehensive', 'expense', 'income', 'debt', 'account', 'networth', 'custom'];
 
@@ -123,11 +124,13 @@ export default function ReportsPage() {
             <Button variant="soft" className="flex-1" onClick={() => void exportExcel()} disabled={busy}>
               <span className="inline-flex items-center gap-1"><FileSpreadsheet size={16} /> {t('reports.exportExcel')}</span>
             </Button>
-            <Button variant="soft" className="flex-1" onClick={() => window.print()}>
-              <span className="inline-flex items-center gap-1"><Printer size={16} /> {t('reports.exportPdf')}</span>
-            </Button>
+            {!isNativeApp() && (
+              <Button variant="soft" className="flex-1" onClick={() => window.print()}>
+                <span className="inline-flex items-center gap-1"><Printer size={16} /> {t('reports.exportPdf')}</span>
+              </Button>
+            )}
           </div>
-          <p className="no-print mb-2 px-1 text-[11px] text-ink-dim">{t('reports.pdfHint')}</p>
+          <p className="no-print mb-2 px-1 text-[11px] text-ink-dim">{t(isNativeApp() ? 'reports.pdfNative' : 'reports.pdfHint')}</p>
           <ReportView doc={doc} />
         </>
       )}

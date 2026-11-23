@@ -1,5 +1,6 @@
 import type { ReportDoc, ReportColumn, CellValue } from '../engine/reports';
 import { CURRENCIES, type CurrencyCode } from '../engine/money';
+import { downloadFile } from './download';
 
 /** Minor units → major number for spreadsheet cells (exact for exponents 0 and 2). */
 function toMajor(minor: number, currency: CurrencyCode): number {
@@ -92,13 +93,5 @@ export async function buildReportXlsx(doc: ReportDoc, opts: XlsxOpts): Promise<A
 /** Build the workbook and trigger a download in the browser. */
 export async function exportReportXlsx(doc: ReportDoc, opts: XlsxOpts & { filename: string }): Promise<void> {
   const buf = await buildReportXlsx(doc, opts);
-  const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = opts.filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 5000);
+  await downloadFile(buf, opts.filename, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }

@@ -5,6 +5,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // Where the app is served from: '/' (Netlify, local) or '/my-finance-manager/' (GitHub Pages, set by the workflow)
 const base = process.env.BASE_PATH ?? '/';
+// The Android app (APK) carries every file inside it, so it needs no offline service worker
+const androidApp = process.env.BUILD_TARGET === 'android';
 
 export default defineConfig({
   base,
@@ -12,6 +14,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      disable: androidApp,
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
       manifest: {

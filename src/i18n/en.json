@@ -486,7 +486,8 @@
     "allCategories": "All categories",
     "allTags": "All tags",
     "empty": "No data for these filters.",
-    "exporting": "Preparing file…"
+    "exporting": "Preparing file…",
+    "pdfNative": "PDF export is available in the web version. In the app, use Excel and share it."
   },
   "calendar": {
     "title": "Financial calendar",
@@ -972,7 +973,9 @@
       "scope": "Please tick the Google Drive permission to sync.",
       "load": "Could not load Google sign-in. Check your connection.",
       "generic": "Something went wrong ({{code}})."
-    }
+    },
+    "nativeUnavailable": "Google Drive sync is not available in the Android app yet",
+    "nativeUnavailableHint": "Google does not allow its web sign-in inside apps. Use the encrypted backup file (Backup and restore) to keep a copy or move your data."
   },
   "toast": {
     "create": "{{item}} saved",

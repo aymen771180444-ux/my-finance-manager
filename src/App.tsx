@@ -17,6 +17,7 @@ import { DEFAULT_NOTIFICATION_PREFS } from './db/types';
 import { SyncBanner } from './features/sync/SyncBanner';
 import { Toaster } from './components/Toaster';
 import { usePageTransition } from './hooks/pageTransition';
+import { isNativeApp } from './lib/platform';
 
 // Screens load on demand: the first paint only needs the dashboard.
 const TransactionsPage = lazy(() => import('./features/transactions/TransactionsPage'));
@@ -152,6 +153,18 @@ export default function App() {
 
   useAutoLock();
   useSystemNotifications();
+
+  // Android app: the hardware/gesture Back goes back a screen instead of closing the app
+  useEffect(() => {
+    if (!isNativeApp()) return;
+    let remove: (() => void) | undefined;
+    void import('@capacitor/app').then(({ App: NativeApp }) =>
+      NativeApp.addListener('backButton', ({ canGoBack }) => (canGoBack ? window.history.back() : void NativeApp.exitApp())).then((h) => {
+        remove = () => void h.remove();
+      }),
+    );
+    return () => remove?.();
+  }, []);
 
   // Google Drive sync runs in the background once onboarding is done (no-op when not connected)
   const onboarded = !!settings?.onboardingDone;

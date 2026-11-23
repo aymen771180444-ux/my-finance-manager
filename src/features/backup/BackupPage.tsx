@@ -47,7 +47,7 @@ export default function BackupPage() {
     setMsg(null);
     try {
       const { text, counts } = await createBackup(pw);
-      downloadFile(text, `my-finance-backup-${todayISO()}.mfm`, 'application/octet-stream');
+      await downloadFile(text, `my-finance-backup-${todayISO()}.mfm`, 'application/octet-stream');
       const total = Object.values(counts).reduce((s, n) => s + n, 0);
       setMsg({ ok: true, text: t('backup.created', { count: total }) });
       toast(t('toast.backupDone'));
@@ -96,7 +96,7 @@ export default function BackupPage() {
     setMsg(null);
     try {
       const zip = await buildExportZip(profileId, sets);
-      downloadFile(zip, `my-finance-export-${todayISO()}.zip`, 'application/zip');
+      await downloadFile(zip, `my-finance-export-${todayISO()}.zip`, 'application/zip');
       setMsg({ ok: true, text: t('backup.exported') });
       toast(t('toast.exportDone'));
     } catch (e) {

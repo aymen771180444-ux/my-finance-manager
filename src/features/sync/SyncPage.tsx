@@ -14,6 +14,7 @@ import {
 import type { SyncConflict, SyncState } from '../../db/types';
 import { toast } from '../../store/toast';
 import { formatMoney, type CurrencyCode } from '../../engine/money';
+import { isNativeApp } from '../../lib/platform';
 
 const ERRORS: Record<string, string> = {
   SYNC_BAD_PASSWORD: 'sync.err.badPassword',
@@ -75,7 +76,15 @@ export default function SyncPage() {
 
       {msg && <p className={`mb-3 rounded-2xl px-3 py-2 text-sm ${msg.ok ? 'bg-income-soft text-income' : 'bg-expense-soft text-expense'}`} role="status">{msg.text}</p>}
 
-      {!googleConfigured() ? (
+      {isNativeApp() ? (
+        <Card className="flex items-start gap-3 p-4">
+          <CloudOff size={20} className="mt-0.5 shrink-0 text-ink-dim" />
+          <div>
+            <p className="text-sm font-medium">{t('sync.nativeUnavailable')}</p>
+            <p className="mt-1 text-xs text-ink-dim">{t('sync.nativeUnavailableHint')}</p>
+          </div>
+        </Card>
+      ) : !googleConfigured() ? (
         <Card className="flex items-start gap-3 p-4">
           <CloudOff size={20} className="mt-0.5 shrink-0 text-ink-dim" />
           <div>
