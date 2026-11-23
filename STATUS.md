@@ -3,6 +3,15 @@
 Per PRD §31, every feature is tracked honestly. Updated at each stage review.
 Legend: ✅ Fully implemented · 🟡 Partially implemented · ⏳ Pending integration · 🔜 Planned (later stage) · ❌ Not supported
 
+## Installed web app updates (fixed 2026-11-23)
+
+| Item | Status | Notes |
+|---|---|---|
+| Updating an installed copy | ✅ | A new version waits in the background and is applied when the app opens, or from the "new version ready" banner. Before this fix the offline worker replaced files under a running app, causing "Failed to fetch dynamically imported module" errors and endless loading (worse where github.io is blocked). Verified live on GitHub Pages |
+| Missing screen file safety net | ✅ | A screen that cannot load because of an update reloads once into the new version |
+| Save confirmations | ✅ | Pop-ups follow the user's own taps; background checks no longer mute them |
+| Version label | ✅ | Bottom of Settings (web-N / 1.0.N) |
+
 ## Stage 6 — Google Drive sync (each user's own Drive)
 
 | Feature | Status | Notes |
